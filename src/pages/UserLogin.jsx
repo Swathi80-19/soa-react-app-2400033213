@@ -17,32 +17,30 @@ function UserLogin() {
     setError('')
 
     try {
-      const response = await axios.post('http://localhost:8001/user/login', loginData)
-
-      if (response.status === 200) {
-        console.log('Login successful:', response.data)
-        setError('')
-        setMessage('Login Success')
-      } else {
-        console.error('Login failed:', response)
-        setMessage('')
-        setError('Login Failed')
-      }
-    } catch (error) {
-      if (error.response) {
-        console.error('Error in response:', error.response.data)
-        setMessage('')
-        setError(error.response.data?.message || 'Error in response')
-      } else if (error.request) {
-        console.error('Error in request:', error.request)
-        setMessage('')
-        setError('Error in request')
-      } else {
-        console.error('Error:', error.message)
-        setMessage('')
-        setError('Something went wrong')
-      }
-    }
+          const response = await axios.post('http://localhost:8001/user/login', loginData)
+    
+          if (response.status === 200) {
+            console.log('Login successful:', response.data)
+            setError('')
+            setMessage('Login Success')
+          } else {
+            console.error('Login failed:', response)
+            setMessage('')
+            setError('Login Failed')
+          }
+        } catch (error) {
+          setMessage('')
+    
+          if (error.response?.status === 401) {
+            setError(error.response.data?.message || error.response.data || 'Invalid email or password')
+          } else if (error.response?.status === 500) {
+            setError('Internal Server Error')
+          } else if (error.request) {
+            setError('Network Error - Server not responding')
+          } else {
+            setError('Bad Request - Check your input')
+          }
+        }
   }
 
   return (
