@@ -32,7 +32,7 @@ function UserLogin() {
       setMessage('')
 
       if (error.response?.status === 401) {
-        setError(error.response.data?.message  error.response.data  'Invalid email or password')
+        setError(error.response.data?.message || error.response.data || 'Invalid email or password')
       } else if (error.response?.status === 500) {
         setError('Internal Server Error')
       } else if (error.request) {
